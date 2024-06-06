@@ -113,3 +113,7 @@ Este documento define as regras de negócio e requisitos do sistema.
     
 * Garantir a integridade dos dados através de transações atômicas.
 * Sistema de backup e recuperação para prevenir perda de dados.
+
+## Fluxo / Diagramas:
+
+![Atividade_5](https://github.com/aannddrree/ProjAndreVeiculos/assets/8753843/ab2b1614-a014-4eb6-8dda-5d532e236a20)
