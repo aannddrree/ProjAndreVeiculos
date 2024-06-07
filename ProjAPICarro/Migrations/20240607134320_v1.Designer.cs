@@ -12,7 +12,7 @@ using ProjAPICarro.Data;
 namespace ProjAPICarro.Migrations
 {
     [DbContext(typeof(ProjAPICarroContext))]
-    [Migration("20240606192934_v1")]
+    [Migration("20240607134320_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,23 @@ namespace ProjAPICarro.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Models.Cargo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cargo");
+                });
 
             modelBuilder.Entity("Models.Carro", b =>
                 {
@@ -103,10 +120,6 @@ namespace ProjAPICarro.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -127,8 +140,6 @@ namespace ProjAPICarro.Migrations
                     b.HasIndex("EnderecoId");
 
                     b.ToTable("Pessoas");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Pessoa");
                 });
 
             modelBuilder.Entity("Models.Cliente", b =>
@@ -138,7 +149,25 @@ namespace ProjAPICarro.Migrations
                     b.Property<decimal>("Renda")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasDiscriminator().HasValue("Cliente");
+                    b.ToTable("Clientes", (string)null);
+                });
+
+            modelBuilder.Entity("Models.Funcionario", b =>
+                {
+                    b.HasBaseType("Models.Pessoa");
+
+                    b.Property<int>("CargoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Comissao")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorComissao")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasIndex("CargoId");
+
+                    b.ToTable("Funcionarios", (string)null);
                 });
 
             modelBuilder.Entity("Models.Pessoa", b =>
@@ -150,6 +179,32 @@ namespace ProjAPICarro.Migrations
                         .IsRequired();
 
                     b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("Models.Cliente", b =>
+                {
+                    b.HasOne("Models.Pessoa", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Cliente", "Documento")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Funcionario", b =>
+                {
+                    b.HasOne("Models.Cargo", "Cargo")
+                        .WithMany()
+                        .HasForeignKey("CargoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Pessoa", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Funcionario", "Documento")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Cargo");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,6 +19,8 @@ namespace ProjAPICarro.Data
         public DbSet<Models.Pessoa>? Pessoas { get; set; } = default!;
         public DbSet<Models.Cliente>? Cliente { get; set; } = default!;
 
+        public DbSet<Models.Funcionario>? Funcionario { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,6 +28,9 @@ namespace ProjAPICarro.Data
             // Configura a chave primária na entidade raiz Pessoa
             modelBuilder.Entity<Pessoa>()
                 .HasKey(p => p.Documento);
+
+            modelBuilder.Entity<Cliente>().ToTable("Clientes");
+            modelBuilder.Entity<Funcionario>().ToTable("Funcionarios");
         }
 
 
