@@ -9,6 +9,7 @@ namespace Models
 {
     public class Cartao
     {
+        public int Id { get; set; }
         public string NumeroCartao { get; set; }
         public string CodigoSeguranca { get; set; }
         public string DataValidade { get; set; }

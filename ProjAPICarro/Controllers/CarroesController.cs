@@ -32,21 +32,16 @@ namespace ProjAPICarro.Controllers
             return await _context.Carro.ToListAsync();
         }
 
-        // GET: api/Carroes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Carro>> GetCarro(string id)
+        // GET: api/Carroes/5   dapper/1   --- ado/1   --- ef/ 1
+        [HttpGet("{tipoTecnologia}/{id}")]
+        public async Task<ActionResult<Carro>> GetCarro(string id, string tipoTecnologia)
         {
           if (_context.Carro == null)
           {
               return NotFound();
           }
             var carro = await _context.Carro.FindAsync(id);
-
-            if (carro == null)
-            {
-                return NotFound();
-            }
-
+  
             return carro;
         }
 
